@@ -12,7 +12,7 @@ from app.db.collections import webpages_collection
 router = APIRouter()
 background_task = None
 
-@router.post("/websites/")
+@router.post("/websites/{agent_id}/")
 async def create_agent_websites(agent_id: str, req_data: AgentWebsiteCreateRequest):
     try:
         request_data = req_data.model_dump()
@@ -32,7 +32,7 @@ async def create_agent_websites(agent_id: str, req_data: AgentWebsiteCreateReque
         return response_error_handler(500, f"Error starting background task: {str(e)}")
 
 
-@router.get("/")
+@router.get("/websites/{agent_id}/")
 async def webpages_queue(agent_id: str):
     try:
         records = webpages_collection.find({"agent_id": ObjectId(agent_id)})
@@ -45,10 +45,7 @@ async def webpages_queue(agent_id: str):
             record["updated_at"] = record["updated_at"].isoformat()
             results.append(record)
 
-        if all(record["status"] == "done" for record in results):
-            delete_result = webpages_collection.delete_many({"agent_id": ObjectId(agent_id)})
-            print(f"Deleted {delete_result.deleted_count} records.")
-
         return response_success_handler("Success", results)
     except Exception as e:
         return response_error_handler(500, f"Error fetching records: {str(e)}")
+

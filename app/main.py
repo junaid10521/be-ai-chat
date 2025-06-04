@@ -16,6 +16,6 @@ app.add_middleware(
 )
 
 # Mount the scraping-related APIs
-app.include_router(scraper_router, prefix="/api/scraper")
+app.include_router(scraper_router, prefix="/api/scraper", tags=["Scraper"])
 app.include_router(agent_router, prefix="/api/agents", tags=["Agents"])
 app.include_router(webpages_routes, prefix="/api/webpages-queue")

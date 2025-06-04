@@ -9,11 +9,10 @@ def handle_scraper_queue(agent_id, request_data):
     has_specific_urls = request_data["has_specific_urls"]
 
     for website_url in websites:
-        website_url = normalize_url(website_url)
         req_data = {
             "agent_id": ObjectId(agent_id),
-            "base_url": website_url,
-            "url": website_url,
+            "base_url": website_url, 
+            "url": website_url,      
             "status": "pending",
             "level": 0,
             "retries": 0,
@@ -59,3 +58,4 @@ def handle_scraper_queue(agent_id, request_data):
         else:
             scrapping_req_data["attempts"] = 1
             scrapping_requests_collection.insert_one(scrapping_req_data)
+
